@@ -13,11 +13,11 @@ import uuid
 from .models import User, Medicine, Category, Bill, BillItem, CartItem, PharmacyOrder
 from .forms import MedicineForm, UserCreateForm, OrderForm
 from .generate_signature import genSha256
+import base64, json
 
 
-# ── eSewa test credentials (replace with live for production) ──
-ESEWA_SECRET_KEY  = '8gBm/:&EnhH.1/q'   # eSewa test secret key
-ESEWA_PRODUCT_CODE = 'EPAYTEST'           # eSewa test product code
+ESEWA_SECRET_KEY  = '8gBm/:&EnhH.1/q'   
+ESEWA_PRODUCT_CODE = 'EPAYTEST'       
 ESEWA_PAYMENT_URL  = 'https://rc-epay.esewa.com.np/api/epay/main/v2/form'
 
 
@@ -237,12 +237,7 @@ def clear_cart(request):
 
 @login_required
 def order_now(request, pk):
-    """
-    STEP 1: User clicks 'Order Now' on a cart item.
-    Shows an order form asking for address, contact, payment method.
-    URL: /cart/order/<cart_item_pk>/
-    Template: pharmacy/order_form.html
-    """
+   
     cart_item = get_object_or_404(CartItem, pk=pk, user=request.user)
 
     if request.method == 'POST':
@@ -263,12 +258,11 @@ def order_now(request, pk):
             )
 
             if order.payment_method == 'esewa':
-                # ── Redirect to eSewa form ──
-                # Pass order id and cart item id as query params
+                
                 esewa_url = reverse('esewa_form')
                 return redirect(f'{esewa_url}?o_id={order.id}&c_id={cart_item.id}')
 
-            # ── Cash on Delivery ──
+           
            
             cart_item.medicine.stock_quantity -= cart_item.quantity
             cart_item.medicine.save()
@@ -315,10 +309,9 @@ class EsewaFormView(View):
         order     = get_object_or_404(PharmacyOrder, id=o_id, user=request.user)
         cart_item = get_object_or_404(CartItem, id=c_id)
 
-        # Generate a unique transaction ID for this payment attempt
         transaction_uuid = str(uuid.uuid4())
 
-        # Save UUID to order so we can verify it in the success callback
+      
         order.transaction_uuid = transaction_uuid
         order.save()
 
@@ -360,19 +353,13 @@ class EsewaFormView(View):
 
 
 def esewa_success(request):
-    """
-    STEP 3a: eSewa redirects here after SUCCESSFUL payment.
-    URL: /esewa/success/
-    Template: pharmacy/esewa_success.html
-
-    eSewa sends encoded data in the URL — we decode and verify it.
-    """
-    import base64, json
+   
+    
 
     encoded_data = request.GET.get('data', '')
 
     try:
-        # Decode the base64 response from eSewa
+  
         decoded_bytes = base64.b64decode(encoded_data)
         decoded_str   = decoded_bytes.decode('utf-8')
         response_data = json.loads(decoded_str)
@@ -408,11 +395,7 @@ def esewa_success(request):
 
 
 def esewa_failure(request):
-    """
-    STEP 3b: eSewa redirects here after FAILED payment.
-    URL: /esewa/failure/
-    Template: pharmacy/esewa_failure.html
-    """
+
     return render(request, 'pharmacy/esewa_failure.html')
 
 
