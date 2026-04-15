@@ -1,0 +1,153 @@
+{% extends 'pharmacy/base.html' %}
+{% block title %}Medicines — PharmaCare{% endblock %}
+{% block page_title %}<i class="bi bi-capsule me-2"></i>Medicine Inventory{% endblock %}
+
+{% block content %}
+
+<!-- ── Search & Filter ── -->
+<div class="card mb-3">
+    <div class="card-body py-3">
+        <form method="GET" class="row g-2 align-items-end">
+            <div class="col-md-5">
+                <label class="form-label">Search</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-white">
+                        <i class="bi bi-search" style="color:#0ea5e9;"></i>
+                    </span>
+                    <input type="text" name="search" class="form-control"
+                           placeholder="Search medicine name..."
+                           value="{{ search_query }}">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Category</label>
+                <select name="category" class="form-select">
+                    <option value="">All Categories</option>
+                    {% for cat in categories %}
+                    <option value="{{ cat.id }}"
+                        {% if request.GET.category == cat.id|stringformat:"s" %}
+                        selected{% endif %}>
+                        {{ cat.name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">&nbsp;</label>
+                <button type="submit" class="btn w-100 text-white"
+                        style="background:#0ea5e9;">
+                    <i class="bi bi-funnel me-1"></i>Filter
+                </button>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">&nbsp;</label>
+                <a href="{% url 'medicine_list' %}"
+                   class="btn btn-outline-secondary w-100">
+                    Clear
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- ── Add Button (Admin only) ── -->
+{% if user.role == 'admin' %}
+<div class="mb-3 text-end">
+    <a href="{% url 'medicine_add' %}" class="btn btn-success">
+        <i class="bi bi-plus-lg me-1"></i>Add Medicine
+    </a>
+</div>
+{% endif %}
+
+<!-- ── Medicine Table ── -->
+<div class="card">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Category</th>
+                        <th>Price</th>
+                        <th>Stock</th>
+                        <th>Expiry</th>
+                        <th>Manufacturer</th>
+                        <th>Details</th>
+                        {% if user.role == 'admin' %}<th>Actions</th>{% endif %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for med in medicines %}
+                    <tr {% if med.is_expired %}
+                            style="background:#fff1f2;"
+                        {% elif med.is_low_stock %}
+                            style="background:#fefce8;"
+                        {% endif %}>
+                        <td class="text-muted">{{ forloop.counter }}</td>
+                        <td>
+                            <strong>{{ med.name }}</strong>
+                            {% if med.is_expired %}
+                            <span class="badge bg-danger ms-1">Expired</span>
+                            {% elif med.is_low_stock %}
+                            <span class="badge ms-1"
+                                  style="background:#fef9c3; color:#854d0e;">
+                                Low Stock
+                            </span>
+                            {% endif %}
+                        </td>
+                        <td>{{ med.category.name|default:"—" }}</td>
+                        <td>Rs. {{ med.price }}</td>
+                        <td>
+                            <span class="badge rounded-pill
+                                {% if med.stock_quantity == 0 %}bg-danger
+                                {% elif med.is_low_stock %}bg-warning text-dark
+                                {% else %}bg-success{% endif %}">
+                                {{ med.stock_quantity }}
+                            </span>
+                        </td>
+                        <td class="small">{{ med.expiry_date|date:"d M Y" }}</td>
+                        <td class="small text-muted">{{ med.manufacturer }}</td>
+                        <!-- View Details — visible to ALL users -->
+                        <td>
+                            <a href="{% url 'medicine_detail' med.pk %}"
+                               class="btn btn-sm text-white"
+                               style="background:#0ea5e9;">
+                                <i class="bi bi-eye me-1"></i>View
+                            </a>
+                        </td>
+
+                        {% if user.role == 'admin' %}
+                        <td>
+                            <a href="{% url 'medicine_edit' med.pk %}"
+                               class="btn btn-sm me-1"
+                               style="background:#e0f2fe; color:#0284c7;">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            <a href="{% url 'medicine_delete' med.pk %}"
+                               class="btn btn-sm btn-outline-danger">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </td>
+                        {% endif %}
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="8" class="text-center py-4 text-muted">
+                            <i class="bi bi-inbox d-block fs-3 mb-1"></i>
+                            No medicines found.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="card-footer small text-muted d-flex gap-3">
+        <span>Total: <strong>{{ medicines|length }}</strong></span>
+        <span style="color:#854d0e;">■ Low Stock</span>
+        <span class="text-danger">■ Expired</span>
+    </div>
+</div>
+
+{% endblock %}

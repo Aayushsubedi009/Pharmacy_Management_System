@@ -1,0 +1,87 @@
+{% extends 'pharmacy/base.html' %}
+{% block title %}My Orders — PharmaCare{% endblock %}
+{% block page_title %}<i class="bi bi-bag me-2"></i>My Orders{% endblock %}
+
+{% block content %}
+{% if orders %}
+<div class="card">
+    <div class="card-header text-white"
+         style="background:#0ea5e9;">
+        <i class="bi bi-bag me-2"></i>Order History
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Medicine</th>
+                        <th>Qty</th>
+                        <th>Total</th>
+                        <th>Address</th>
+                        <th>Payment</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                    <tr>
+                        <td class="text-muted small">{{ forloop.counter }}</td>
+                        <td>
+                            <strong style="color:#0c4a6e;">
+                                {{ order.medicine.name }}
+                            </strong>
+                        </td>
+                        <td>{{ order.quantity }}</td>
+                        <td class="fw-semibold" style="color:#0284c7;">
+                            Rs. {{ order.total_price }}
+                        </td>
+                        <td class="small text-muted">
+                            {{ order.address|truncatechars:30 }}
+                        </td>
+                        <td>
+                            {% if order.payment_method == 'esewa' %}
+                            <span class="badge rounded-pill bg-success">
+                                <i class="bi bi-credit-card me-1"></i>eSewa
+                            </span>
+                            {% else %}
+                            <span class="badge rounded-pill bg-secondary">
+                                <i class="bi bi-cash me-1"></i>Cash
+                            </span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if order.payment_status == 'paid' %}
+                            <span class="badge bg-success">Paid</span>
+                            {% elif order.payment_status == 'pending' %}
+                            <span class="badge bg-warning text-dark">Pending</span>
+                            {% elif order.payment_status == 'failed' %}
+                            <span class="badge bg-danger">Failed</span>
+                            {% else %}
+                            <span class="badge bg-secondary">{{ order.payment_status }}</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-muted small">
+                            {{ order.created_at|date:"d M Y" }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="card text-center py-5">
+    <i class="bi bi-bag-x" style="font-size:4rem; color:#bae6fd;"></i>
+    <h5 class="mt-3 fw-bold" style="color:#0c4a6e;">No orders yet</h5>
+    <p class="text-muted">Browse medicines and place your first order.</p>
+    <a href="{% url 'medicine_list' %}"
+       class="btn text-white px-4 mx-auto"
+       style="background:#0ea5e9; width:fit-content;">
+        <i class="bi bi-capsule me-2"></i>Browse Medicines
+    </a>
+</div>
+{% endif %}
+{% endblock %}

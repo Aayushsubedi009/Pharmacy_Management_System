@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}PharmaCare{% endblock %}</title>
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+
+    <style>
+        /* ═══════════════════════════════════════
+           SKY BLUE THEME — shared by all pages
+        ═══════════════════════════════════════ */
+        :root {
+            --sky:       #0ea5e9;   /* primary sky blue        */
+            --sky-dark:  #0284c7;   /* darker shade for hover  */
+            --sky-light: #e0f2fe;   /* very light blue bg      */
+            --sky-mid:   #bae6fd;   /* medium light blue       */
+            --sidebar-w: 230px;
+            --topbar-h:  60px;
+        }
+
+        * { box-sizing: border-box; }
+        body {
+            background: #f0f9ff;   /* lightest sky blue page bg */
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 14px;
+        }
+
+        /* ── Sidebar ─────────────────────────── */
+        .sidebar {
+            position: fixed;
+            top: 0; left: 0;
+            width: var(--sidebar-w);
+            height: 100vh;
+            background: #0c4a6e;   /* deep navy blue */
+            overflow-y: auto;
+            z-index: 200;
+        }
+        .sidebar-brand {
+            background: #083c5c;
+            padding: 1rem 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            color: #fff;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border-bottom: 1px solid #0369a1;
+        }
+        .sidebar-brand i { color: #38bdf8; font-size: 1.4rem; }
+
+        .nav-section {
+            color: #7dd3fc;
+            font-size: 0.68rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            padding: 1rem 1.25rem 0.3rem;
+        }
+        .sidebar .nav-link {
+            color: #bae6fd;
+            padding: 0.55rem 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-size: 0.88rem;
+            border-left: 3px solid transparent;
+            transition: all 0.15s;
+        }
+        .sidebar .nav-link:hover,
+        .sidebar .nav-link.active {
+            color: #fff;
+            background: rgba(56,189,248,0.15);
+            border-left-color: #38bdf8;
+        }
+        .sidebar .nav-link i { font-size: 1rem; width: 18px; }
+
+        /* ── Top Bar ─────────────────────────── */
+        .topbar {
+            position: fixed;
+            top: 0;
+            left: var(--sidebar-w);
+            right: 0;
+            height: var(--topbar-h);
+            background: #fff;
+            border-bottom: 2px solid var(--sky-mid);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1.5rem;
+            z-index: 100;
+        }
+        .topbar-title {
+            font-weight: 700;
+            font-size: 1rem;
+            color: #0c4a6e;
+        }
+        .user-pill {
+            background: var(--sky-light);
+            color: var(--sky-dark);
+            border: 1px solid var(--sky-mid);
+            border-radius: 50px;
+            padding: 0.3rem 1rem;
+            font-size: 0.82rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        /* ── Main Content ─────────────────────── */
+        .main {
+            margin-left: var(--sidebar-w);
+            padding-top: calc(var(--topbar-h) + 1.25rem);
+            padding-left: 1.5rem;
+            padding-right: 1.5rem;
+            padding-bottom: 2rem;
+            min-height: 100vh;
+        }
+
+        /* ── Cards ───────────────────────────── */
+        .card {
+            border: 1px solid var(--sky-mid);
+            border-radius: 12px;
+            box-shadow: 0 1px 6px rgba(14,165,233,0.08);
+        }
+        .card-header {
+            border-radius: 12px 12px 0 0 !important;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        /* ── Stat Cards ──────────────────────── */
+        .stat-card {
+            border-radius: 12px;
+            border: 1px solid var(--sky-mid);
+            background: #fff;
+            padding: 1.1rem 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: 0 1px 6px rgba(14,165,233,0.08);
+        }
+        .stat-icon {
+            width: 48px; height: 48px;
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.4rem;
+            flex-shrink: 0;
+        }
+        .stat-label { font-size: 0.78rem; color: #64748b; }
+        .stat-value { font-size: 1.45rem; font-weight: 700; color: #0c4a6e; line-height: 1; }
+
+        /* ── Buttons ─────────────────────────── */
+        .btn-sky {
+            background: var(--sky);
+            color: #fff;
+            border: none;
+        }
+        .btn-sky:hover { background: var(--sky-dark); color: #fff; }
+
+        /* ── Table ───────────────────────────── */
+        .table thead th {
+            background: var(--sky-light);
+            color: #0c4a6e;
+            font-weight: 600;
+            font-size: 0.82rem;
+            border-bottom: 2px solid var(--sky-mid);
+        }
+        .table td { vertical-align: middle; font-size: 0.88rem; }
+        .table-hover tbody tr:hover { background: #f0f9ff; }
+
+        /* ── Badges ──────────────────────────── */
+        .badge-sky { background: var(--sky-light); color: var(--sky-dark); }
+
+        /* ── Forms ───────────────────────────── */
+        .form-control:focus, .form-select:focus {
+            border-color: var(--sky);
+            box-shadow: 0 0 0 0.2rem rgba(14,165,233,0.2);
+        }
+        .form-label { font-weight: 600; font-size: 0.85rem; color: #0c4a6e; }
+
+        /* ── Alerts ──────────────────────────── */
+        .alert { border-radius: 10px; font-size: 0.88rem; }
+    </style>
+
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+{% if user.is_authenticated %}
+
+<!-- ══════════ SIDEBAR ══════════ -->
+<div class="sidebar">
+    <div class="sidebar-brand">
+        <i class="bi bi-capsule-pill"></i>
+        PharmaCare
+    </div>
+
+    <div class="nav-section">Main</div>
+    <a href="{% url 'dashboard' %}"
+       class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+        <i class="bi bi-speedometer2"></i> Dashboard
+    </a>
+
+    <div class="nav-section">Medicines</div>
+    <a href="{% url 'medicine_list' %}"
+       class="nav-link {% if 'medicine' in request.resolver_match.url_name %}active{% endif %}">
+        <i class="bi bi-capsule"></i> Medicine List
+    </a>
+    {% if user.role == 'admin' %}
+    <a href="{% url 'medicine_add' %}"
+       class="nav-link">
+        <i class="bi bi-plus-circle"></i> Add Medicine
+    </a>
+    {% endif %}
+
+    <div class="nav-section">Billing</div>
+    <a href="{% url 'cart' %}"
+       class="nav-link {% if request.resolver_match.url_name == 'cart' %}active{% endif %}">
+        <i class="bi bi-cart3"></i> My Cart
+        {% with count=request.user.cartitem_set.count %}
+        {% if count > 0 %}
+        <span class="badge rounded-pill ms-auto"
+              style="background:#38bdf8; color:#0c4a6e; font-size:0.7rem;">
+            {{ count }}
+        </span>
+        {% endif %}
+        {% endwith %}
+    </a>
+    <a href="{% url 'create_bill' %}"
+       class="nav-link {% if request.resolver_match.url_name == 'create_bill' %}active{% endif %}">
+        <i class="bi bi-receipt"></i> New Bill
+    </a>
+    <a href="{% url 'bill_list' %}"
+       class="nav-link {% if request.resolver_match.url_name == 'bill_list' %}active{% endif %}">
+        <i class="bi bi-list-check"></i> Bill History
+    </a>
+
+    {% if user.role == 'admin' %}
+    <div class="nav-section">Admin</div>
+    <a href="{% url 'reports' %}"
+       class="nav-link {% if request.resolver_match.url_name == 'reports' %}active{% endif %}">
+        <i class="bi bi-bar-chart-line"></i> Reports
+    </a>
+    <a href="{% url 'user_list' %}"
+       class="nav-link {% if 'user' in request.resolver_match.url_name %}active{% endif %}">
+        <i class="bi bi-people"></i> Users
+    </a>
+    {% endif %}
+
+
+    <div class="nav-section">Account</div>
+
+<a href="{% url 'my_orders' %}"
+   class="nav-link {% if request.resolver_match.url_name == 'my_orders' %}active{% endif %}">
+    <i class="bi bi-bag-check"></i> My Orders
+</a>
+
+<a href="{% url 'logout' %}" class="nav-link" style="color:#fca5a5;">
+    <i class="bi bi-box-arrow-left"></i> Logout
+</a>
+
+    
+</div>
+
+<!-- ══════════ TOP BAR ══════════ -->
+<div class="topbar">
+    <span class="topbar-title">
+        {% block page_title %}Dashboard{% endblock %}
+    </span>
+    <div class="user-pill">
+        <i class="bi bi-person-circle"></i>
+        {{ user.username }} &nbsp;·&nbsp; {{ user.role|title }}
+    </div>
+</div>
+
+<!-- ══════════ MAIN CONTENT ══════════ -->
+<div class="main">
+
+    <!-- Flash Messages -->
+    {% if messages %}
+    <div class="mb-3">
+        {% for message in messages %}
+        <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags|default:'info' }}{% endif %} alert-dismissible fade show py-2">
+            <i class="bi bi-info-circle me-2"></i>{{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% block content %}{% endblock %}
+</div>
+
+{% else %}
+    {% block auth_content %}{% endblock %}
+{% endif %}
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,80 @@
+{% extends 'pharmacy/base.html' %}
+{% block title %}{{ title }} — PharmaCare{% endblock %}
+{% block page_title %}<i class="bi bi-person-plus me-2"></i>{{ title }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header text-white"
+                 style="background:#0ea5e9;">
+                <i class="bi bi-person-plus me-2"></i>{{ title }}
+            </div>
+            <div class="card-body p-4">
+                <form method="POST">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label class="form-label">Username *</label>
+                        {{ form.username }}
+                        {% if form.username.errors %}
+                        <div class="text-danger small mt-1">{{ form.username.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        {{ form.email }}
+                        {% if form.email.errors %}
+                        <div class="text-danger small mt-1">{{ form.email.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Role *</label>
+                        {{ form.role }}
+                        <div class="form-text">
+                            Admin has full access. Pharmacist can bill and view medicines.
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Password *</label>
+                        {{ form.password }}
+                        <div class="form-text">Minimum 8 characters.</div>
+                        {% if form.password.errors %}
+                        <div class="text-danger small mt-1">{{ form.password.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label">Confirm Password *</label>
+                        {{ form.confirm_password }}
+                        {% if form.confirm_password.errors %}
+                        <div class="text-danger small mt-1">{{ form.confirm_password.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    {% if form.non_field_errors %}
+                    <div class="alert alert-danger small">
+                        {{ form.non_field_errors }}
+                    </div>
+                    {% endif %}
+
+                    <div class="d-flex gap-2">
+                        <button type="submit"
+                                class="btn text-white px-4"
+                                style="background:#0ea5e9;">
+                            <i class="bi bi-save me-2"></i>Create User
+                        </button>
+                        <a href="{% url 'user_list' %}"
+                           class="btn btn-outline-secondary px-4">
+                            Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

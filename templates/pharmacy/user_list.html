@@ -1,0 +1,79 @@
+{% extends 'pharmacy/base.html' %}
+{% block title %}Users — PharmaCare{% endblock %}
+{% block page_title %}<i class="bi bi-people me-2"></i>User Management{% endblock %}
+
+{% block content %}
+
+<div class="mb-3 text-end">
+    <a href="{% url 'user_create' %}"
+       class="btn text-white"
+       style="background:#0ea5e9;">
+        <i class="bi bi-person-plus me-1"></i>Add New User
+    </a>
+</div>
+
+<div class="card">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Status</th>
+                        <th>Joined</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for u in users %}
+                    <tr>
+                        <td class="text-muted small">{{ forloop.counter }}</td>
+                        <td>
+                            <strong>{{ u.username }}</strong>
+                        </td>
+                        <td class="small text-muted">{{ u.email|default:"—" }}</td>
+                        <td>
+                            <span class="badge rounded-pill
+                                {% if u.role == 'admin' %}
+                                    bg-dark
+                                {% else %}
+                                    " style="background:#e0f2fe; color:#0284c7;"
+                                {% endif %}">
+                                {% if u.role == 'admin' %}
+                                    <i class="bi bi-shield-check me-1"></i>
+                                {% else %}
+                                    <i class="bi bi-capsule me-1"></i>
+                                {% endif %}
+                                {{ u.role|title }}
+                            </span>
+                        </td>
+                        <td>
+                            <span class="badge rounded-pill
+                                {% if u.is_active %}bg-success{% else %}bg-secondary{% endif %}">
+                                {% if u.is_active %}Active{% else %}Inactive{% endif %}
+                            </span>
+                        </td>
+                        <td class="small text-muted">
+                            {{ u.date_joined|date:"d M Y" }}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center py-4 text-muted">
+                            <i class="bi bi-people d-block fs-3 mb-1"></i>
+                            No users found.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="card-footer small text-muted">
+        Total users: <strong>{{ users|length }}</strong>
+    </div>
+</div>
+
+{% endblock %}

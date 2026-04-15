@@ -1,0 +1,112 @@
+{% extends 'pharmacy/base.html' %}
+{% block title %}Redirecting to eSewa — PharmaCare{% endblock %}
+{% block page_title %}<i class="bi bi-credit-card me-2"></i>eSewa Payment{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+<div class="col-lg-6">
+    <div class="card text-center p-4">
+
+        <!-- eSewa Logo & Message -->
+        <div class="mb-4">
+            <div class="rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center"
+                 style="width:80px; height:80px; background:#e8f5e9;">
+                <i class="bi bi-shield-check"
+                   style="font-size:2.5rem; color:#3bb54a;"></i>
+            </div>
+            <h5 class="fw-bold" style="color:#0c4a6e;">
+                Redirecting to eSewa
+            </h5>
+            <p class="text-muted small">
+                Please wait while we redirect you to eSewa for secure payment.
+                Do not close this page.
+            </p>
+        </div>
+
+        <!-- Order Summary -->
+        <div class="p-3 rounded mb-4 text-start"
+             style="background:#f0f9ff; border:1px solid #bae6fd;">
+            <div class="d-flex justify-content-between small mb-1">
+                <span class="text-muted">Medicine</span>
+                <span class="fw-semibold">{{ order.medicine.name }}</span>
+            </div>
+            <div class="d-flex justify-content-between small mb-1">
+                <span class="text-muted">Quantity</span>
+                <span>{{ order.quantity }}</span>
+            </div>
+            <div class="d-flex justify-content-between small mb-1">
+                <span class="text-muted">Deliver to</span>
+                <span>{{ order.address }}</span>
+            </div>
+            <hr style="border-color:#bae6fd;" class="my-2">
+            <div class="d-flex justify-content-between fw-bold">
+                <span style="color:#0c4a6e;">Total Amount</span>
+                <span style="color:#0ea5e9;">Rs. {{ order.total_price }}</span>
+            </div>
+        </div>
+
+        <!-- Spinner -->
+        <div class="mb-3">
+            <div class="spinner-border text-success" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+        <div class="text-muted small mb-4">
+            Connecting to eSewa secure gateway...
+        </div>
+
+        <!--
+            eSewa Payment Form
+            This form is hidden and auto-submits to eSewa's server.
+            eSewa reads these fields, verifies the signature,
+            and processes the payment.
+        -->
+        <form id="esewaForm"
+              action="{{ payment_url }}"
+              method="POST">
+
+            <input type="hidden" name="amount"
+                   value="{{ data.amount }}">
+            <input type="hidden" name="tax_amount"
+                   value="{{ data.tax_amount }}">
+            <input type="hidden" name="total_amount"
+                   value="{{ data.total_amount }}">
+            <input type="hidden" name="transaction_uuid"
+                   value="{{ data.transaction_uuid }}">
+            <input type="hidden" name="product_code"
+                   value="{{ data.product_code }}">
+            <input type="hidden" name="product_service_charge"
+                   value="{{ data.product_service_charge }}">
+            <input type="hidden" name="product_delivery_charge"
+                   value="{{ data.product_delivery_charge }}">
+            <input type="hidden" name="success_url"
+                   value="{{ data.success_url }}">
+            <input type="hidden" name="failure_url"
+                   value="{{ data.failure_url }}">
+            <input type="hidden" name="signed_field_names"
+                   value="{{ data.signed_field_names }}">
+            <input type="hidden" name="signature"
+                   value="{{ data.signature }}">
+
+            <!-- Fallback manual button -->
+            <button type="submit"
+                    class="btn text-white px-4"
+                    style="background:#3bb54a; border:none;">
+                <i class="bi bi-box-arrow-up-right me-2"></i>
+                Go to eSewa
+            </button>
+        </form>
+
+    </div>
+</div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    /* Auto-submit after 1.5 seconds so user sees the animation */
+    setTimeout(function() {
+        document.getElementById('esewaForm').submit();
+    }, 1500);
+</script>
+{% endblock %}

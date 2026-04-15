@@ -1,0 +1,111 @@
+{% extends 'pharmacy/base.html' %}
+{% block title %}{{ title }} — PharmaCare{% endblock %}
+{% block page_title %}<i class="bi bi-capsule me-2"></i>{{ title }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header text-white"
+                 style="background:#0ea5e9;">
+                <i class="bi bi-capsule-pill me-2"></i>{{ title }}
+            </div>
+            <div class="card-body p-4">
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="row g-3">
+
+                        <div class="col-md-8">
+                            <label class="form-label">Medicine Name *</label>
+                            {{ form.name }}
+                            {% if form.name.errors %}
+                            <div class="text-danger small mt-1">{{ form.name.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label">Category</label>
+                            {{ form.category }}
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label">Price (Rs.) *</label>
+                            {{ form.price }}
+                            {% if form.price.errors %}
+                            <div class="text-danger small mt-1">{{ form.price.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label">Stock Quantity *</label>
+                            {{ form.stock_quantity }}
+                            {% if form.stock_quantity.errors %}
+                            <div class="text-danger small mt-1">{{ form.stock_quantity.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label">Low Stock Alert (below)</label>
+                            {{ form.low_stock_threshold }}
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Expiry Date *</label>
+                            {{ form.expiry_date }}
+                            {% if form.expiry_date.errors %}
+                            <div class="text-danger small mt-1">{{ form.expiry_date.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Manufacturer *</label>
+                            {{ form.manufacturer }}
+                            {% if form.manufacturer.errors %}
+                            <div class="text-danger small mt-1">{{ form.manufacturer.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label">Medicine Image (optional)</label>
+                            {{ form.image }}
+                            {% if form.instance.image %}
+                            <div class="mt-2">
+                                <img src="{{ medicine.image.url }}"
+                                     style="height:80px; border-radius:8px;
+                                            border:1px solid #bae6fd;"
+                                     alt="current image">
+                                <div class="form-text">Current image shown above.</div>
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label">Description (optional)</label>
+                            {{ form.description }}
+                        </div>
+
+                    </div>
+
+                    {% if form.non_field_errors %}
+                    <div class="alert alert-danger mt-3 small">
+                        {{ form.non_field_errors }}
+                    </div>
+                    {% endif %}
+
+                    <div class="d-flex gap-2 mt-4">
+                        <button type="submit"
+                                class="btn text-white px-4"
+                                style="background:#0ea5e9;">
+                            <i class="bi bi-save me-2"></i>{{ action }} Medicine
+                        </button>
+                        <a href="{% url 'medicine_list' %}"
+                           class="btn btn-outline-secondary px-4">
+                            Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

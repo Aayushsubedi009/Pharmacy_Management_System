@@ -1,0 +1,139 @@
+{% extends 'pharmacy/base.html' %}
+{% block title %}Reports — PharmaCare{% endblock %}
+{% block page_title %}<i class="bi bi-bar-chart-line me-2"></i>Sales Reports{% endblock %}
+
+{% block content %}
+
+<!-- ── Revenue Summary Cards ── -->
+<div class="row g-3 mb-4">
+    <div class="col-sm-6 col-xl-3">
+        <div class="stat-card">
+            <div class="stat-icon" style="background:#dcfce7;">
+                <i class="bi bi-calendar-day" style="color:#16a34a;"></i>
+            </div>
+            <div>
+                <div class="stat-label">Today</div>
+                <div class="stat-value" style="color:#16a34a; font-size:1.1rem;">
+                    Rs. {{ today_revenue|floatformat:0 }}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="stat-card">
+            <div class="stat-icon" style="background:#e0f2fe;">
+                <i class="bi bi-calendar-week" style="color:#0ea5e9;"></i>
+            </div>
+            <div>
+                <div class="stat-label">This Week</div>
+                <div class="stat-value" style="font-size:1.1rem;">
+                    Rs. {{ week_revenue|floatformat:0 }}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="stat-card">
+            <div class="stat-icon" style="background:#f3e8ff;">
+                <i class="bi bi-calendar-month" style="color:#9333ea;"></i>
+            </div>
+            <div>
+                <div class="stat-label">This Month</div>
+                <div class="stat-value" style="color:#9333ea; font-size:1.1rem;">
+                    Rs. {{ month_revenue|floatformat:0 }}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="stat-card">
+            <div class="stat-icon" style="background:#fef9c3;">
+                <i class="bi bi-graph-up-arrow" style="color:#ca8a04;"></i>
+            </div>
+            <div>
+                <div class="stat-label">All Time</div>
+                <div class="stat-value" style="color:#ca8a04; font-size:1.1rem;">
+                    Rs. {{ total_revenue|floatformat:0 }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ── Chart + Top Medicines ── -->
+<div class="row g-3">
+
+    <!-- Bar Chart -->
+    <div class="col-lg-8">
+        <div class="card h-100">
+            <div class="card-header"
+                 style="background:#e0f2fe; color:#0c4a6e;">
+                <i class="bi bi-bar-chart me-2"></i>Daily Sales — Last 7 Days
+            </div>
+            <div class="card-body">
+                <canvas id="salesChart" height="120"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Top Medicines -->
+    <div class="col-lg-4">
+        <div class="card h-100">
+            <div class="card-header"
+                 style="background:#e0f2fe; color:#0c4a6e;">
+                <i class="bi bi-trophy me-2"></i>Top Selling Medicines
+            </div>
+            <div class="card-body p-0">
+                <ul class="list-group list-group-flush">
+                    {% for item in top_medicines %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center py-2">
+                        <span class="small">
+                            <span class="fw-semibold me-2"
+                                  style="color:#0284c7;">
+                                {{ forloop.counter }}.
+                            </span>
+                            {{ item.medicine__name }}
+                        </span>
+                        <span class="badge rounded-pill"
+                              style="background:#e0f2fe; color:#0284c7;">
+                            {{ item.total_sold }} sold
+                        </span>
+                    </li>
+                    {% empty %}
+                    <li class="list-group-item text-center text-muted small py-3">
+                        No sales data yet.
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const dailySales = {{ daily_sales|safe }};
+new Chart(document.getElementById('salesChart'), {
+    type: 'bar',
+    data: {
+        labels:   dailySales.map(d => d.date),
+        datasets: [{
+            label:           'Revenue (Rs.)',
+            data:            dailySales.map(d => d.total),
+            backgroundColor: 'rgba(14,165,233,0.7)',
+            borderColor:     '#0284c7',
+            borderWidth:     1,
+            borderRadius:    6,
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales:  { y: { beginAtZero: true } }
+    }
+});
+</script>
+{% endblock %}

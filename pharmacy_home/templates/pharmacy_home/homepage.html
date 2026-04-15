@@ -1,0 +1,1278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+{% load static %}
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PharmaCare — Smart Pharmacy Management System</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+/* ═══════════════════════════════════════════
+   ROOT VARIABLES — Sky Blue Medical Theme
+═══════════════════════════════════════════ */
+:root {
+    --sky:        #0ea5e9;
+    --sky-dark:   #0284c7;
+    --sky-deeper: #0c4a6e;
+    --sky-light:  #e0f2fe;
+    --sky-mid:    #bae6fd;
+    --white:      #ffffff;
+    --off-white:  #f8faff;
+    --text-dark:  #0f172a;
+    --text-muted: #64748b;
+    --grad-hero:  linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 50%, #ffffff 100%);
+}
+
+/* ═══════════════════════════════════════════
+   BASE
+═══════════════════════════════════════════ */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+    font-family: 'Outfit', sans-serif;
+    color: var(--text-dark);
+    overflow-x: hidden;
+    background: #fff;
+}
+
+/* ═══════════════════════════════════════════
+   NAVBAR
+═══════════════════════════════════════════ */
+.navbar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    padding: 0.85rem 0;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--sky-mid);
+    transition: all 0.3s;
+}
+.navbar.scrolled {
+    box-shadow: 0 4px 24px rgba(14,165,233,0.1);
+}
+.navbar-brand {
+    font-weight: 800;
+    font-size: 1.35rem;
+    color: var(--sky-deeper) !important;
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    text-decoration: none;
+}
+.navbar-brand .brand-icon {
+    width: 36px; height: 36px;
+    background: var(--sky);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff;
+    font-size: 1.1rem;
+}
+.nav-link-custom {
+    color: var(--text-dark) !important;
+    font-weight: 500;
+    font-size: 0.9rem;
+    padding: 0.4rem 0.85rem !important;
+    border-radius: 8px;
+    transition: all 0.2s;
+    text-decoration: none;
+}
+.nav-link-custom:hover {
+    background: var(--sky-light);
+    color: var(--sky-dark) !important;
+}
+.btn-login {
+    background: var(--sky);
+    color: #fff !important;
+    border: none;
+    border-radius: 10px;
+    padding: 0.48rem 1.3rem;
+    font-weight: 600;
+    font-size: 0.88rem;
+    transition: all 0.25s;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+.btn-login:hover {
+    background: var(--sky-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(14,165,233,0.35);
+}
+
+/* ═══════════════════════════════════════════
+   HERO SECTION
+═══════════════════════════════════════════ */
+.hero {
+    min-height: 100vh;
+    background: var(--grad-hero);
+    display: flex;
+    align-items: center;
+    padding-top: 80px;
+    position: relative;
+    overflow: hidden;
+}
+/* Decorative circles */
+.hero::before {
+    content: '';
+    position: absolute;
+    width: 700px; height: 700px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(14,165,233,0.1) 0%, transparent 70%);
+    top: -200px; right: -200px;
+    pointer-events: none;
+}
+.hero::after {
+    content: '';
+    position: absolute;
+    width: 400px; height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(14,165,233,0.07) 0%, transparent 70%);
+    bottom: -100px; left: -100px;
+    pointer-events: none;
+}
+.hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--sky-light);
+    color: var(--sky-dark);
+    border: 1px solid var(--sky-mid);
+    border-radius: 50px;
+    padding: 0.35rem 1rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    animation: fadeSlideDown 0.6s ease both;
+}
+.hero-badge .dot {
+    width: 8px; height: 8px;
+    background: var(--sky);
+    border-radius: 50%;
+    animation: pulse 1.5s infinite;
+}
+@keyframes pulse {
+    0%,100%{opacity:1;transform:scale(1)}
+    50%{opacity:0.6;transform:scale(1.3)}
+}
+.hero h1 {
+    font-size: clamp(2.4rem, 5vw, 4rem);
+    font-weight: 800;
+    line-height: 1.12;
+    color: var(--sky-deeper);
+    margin-bottom: 1.25rem;
+    animation: fadeSlideDown 0.7s 0.1s ease both;
+}
+.hero h1 .highlight {
+    color: var(--sky);
+    position: relative;
+    display: inline-block;
+}
+.hero h1 .highlight::after {
+    content: '';
+    position: absolute;
+    bottom: 2px; left: 0; right: 0;
+    height: 4px;
+    background: var(--sky-mid);
+    border-radius: 2px;
+    z-index: -1;
+}
+.hero-desc {
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    line-height: 1.75;
+    max-width: 520px;
+    margin-bottom: 2rem;
+    animation: fadeSlideDown 0.7s 0.2s ease both;
+}
+.hero-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 2.5rem;
+    animation: fadeSlideDown 0.7s 0.3s ease both;
+}
+.btn-primary-sky {
+    background: var(--sky);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 0.75rem 1.75rem;
+    font-weight: 700;
+    font-size: 0.95rem;
+    transition: all 0.25s;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+}
+.btn-primary-sky:hover {
+    background: var(--sky-dark);
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(14,165,233,0.35);
+}
+.btn-outline-sky {
+    background: transparent;
+    color: var(--sky-dark);
+    border: 2px solid var(--sky-mid);
+    border-radius: 12px;
+    padding: 0.73rem 1.75rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.25s;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+}
+.btn-outline-sky:hover {
+    background: var(--sky-light);
+    border-color: var(--sky);
+    color: var(--sky-dark);
+    transform: translateY(-2px);
+}
+.hero-stats {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+    animation: fadeSlideDown 0.7s 0.4s ease both;
+}
+.hero-stat .num {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--sky-deeper);
+    line-height: 1;
+}
+.hero-stat .lbl {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin-top: 0.2rem;
+}
+
+/* ─── Hero Image / Slider ─── */
+.hero-visual {
+    position: relative;
+    animation: fadeSlideLeft 0.8s 0.2s ease both;
+}
+.hero-slider {
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 30px 80px rgba(14,165,233,0.2);
+    position: relative;
+}
+.hero-slider .slide {
+    display: none;
+    width: 100%;
+    height: 420px;
+    background-size: cover;
+    background-position: center;
+    border-radius: 20px;
+    position: relative;
+}
+.hero-slider .slide.active { display: block; }
+.slide-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(12,74,110,0.6) 0%, transparent 60%);
+    border-radius: 20px;
+}
+.slide-caption {
+    position: absolute;
+    bottom: 1.5rem;
+    left: 1.5rem;
+    right: 1.5rem;
+    color: #fff;
+}
+.slide-caption h5 {
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-bottom: 0.25rem;
+}
+.slide-caption p {
+    font-size: 0.82rem;
+    opacity: 0.85;
+}
+.slider-dots {
+    position: absolute;
+    bottom: -1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 0.4rem;
+}
+.slider-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--sky-mid);
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+.slider-dot.active {
+    background: var(--sky);
+    width: 24px;
+    border-radius: 4px;
+}
+/* Floating cards on hero */
+.float-card {
+    position: absolute;
+    background: #fff;
+    border-radius: 14px;
+    padding: 0.85rem 1.1rem;
+    box-shadow: 0 10px 40px rgba(14,165,233,0.15);
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--sky-deeper);
+    border: 1px solid var(--sky-mid);
+    animation: float 3s ease-in-out infinite;
+}
+.float-card.card-1 {
+    top: -1rem; left: -2rem;
+    animation-delay: 0s;
+}
+.float-card.card-2 {
+    bottom: 2rem; right: -2rem;
+    animation-delay: 1s;
+}
+@keyframes float {
+    0%,100%{transform:translateY(0)}
+    50%{transform:translateY(-8px)}
+}
+.float-icon {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem;
+}
+
+/* ═══════════════════════════════════════════
+   TRUST BAR
+═══════════════════════════════════════════ */
+.trust-bar {
+    background: var(--sky-deeper);
+    padding: 1.25rem 0;
+    overflow: hidden;
+}
+.trust-bar-track {
+    display: flex;
+    gap: 3rem;
+    animation: scrollLeft 20s linear infinite;
+    width: max-content;
+}
+.trust-item {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: #fff;
+    font-weight: 600;
+    font-size: 0.88rem;
+    white-space: nowrap;
+    opacity: 0.9;
+}
+.trust-item i { color: var(--sky-mid); font-size: 1.1rem; }
+@keyframes scrollLeft {
+    0%{transform:translateX(0)}
+    100%{transform:translateX(-50%)}
+}
+
+/* ═══════════════════════════════════════════
+   SECTIONS SHARED
+═══════════════════════════════════════════ */
+.section { padding: 5rem 0; }
+.section-bg { background: var(--off-white); }
+.section-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: var(--sky-light);
+    color: var(--sky-dark);
+    border-radius: 50px;
+    padding: 0.3rem 0.9rem;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 1rem;
+}
+.section-title {
+    font-size: clamp(1.8rem, 3vw, 2.6rem);
+    font-weight: 800;
+    color: var(--sky-deeper);
+    line-height: 1.2;
+    margin-bottom: 1rem;
+}
+.section-sub {
+    font-size: 1rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+    max-width: 560px;
+}
+
+/* ═══════════════════════════════════════════
+   FEATURES
+═══════════════════════════════════════════ */
+.feature-card {
+    background: #fff;
+    border: 1px solid var(--sky-mid);
+    border-radius: 16px;
+    padding: 1.75rem;
+    height: 100%;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+}
+.feature-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--sky);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s;
+}
+.feature-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 50px rgba(14,165,233,0.12);
+    border-color: var(--sky);
+}
+.feature-card:hover::before { transform: scaleX(1); }
+.feature-icon {
+    width: 52px; height: 52px;
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem;
+    margin-bottom: 1.1rem;
+}
+.feature-card h5 {
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: var(--sky-deeper);
+    margin-bottom: 0.5rem;
+}
+.feature-card p {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    line-height: 1.65;
+    margin: 0;
+}
+
+/* ═══════════════════════════════════════════
+   HOW IT WORKS — STEPS
+═══════════════════════════════════════════ */
+.step-card {
+    text-align: center;
+    padding: 2rem 1.5rem;
+    position: relative;
+}
+.step-number {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    background: var(--sky);
+    color: #fff;
+    font-weight: 800;
+    font-size: 1.2rem;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 1.25rem;
+    box-shadow: 0 8px 24px rgba(14,165,233,0.3);
+}
+.step-connector {
+    position: absolute;
+    top: 2.8rem;
+    right: -30%;
+    width: 60%;
+    height: 2px;
+    background: linear-gradient(to right, var(--sky), var(--sky-mid));
+    z-index: 0;
+}
+.step-card h5 {
+    font-weight: 700;
+    color: var(--sky-deeper);
+    margin-bottom: 0.5rem;
+}
+.step-card p {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+}
+
+/* ═══════════════════════════════════════════
+   TESTIMONIALS
+═══════════════════════════════════════════ */
+.testimonial-card {
+    background: #fff;
+    border: 1px solid var(--sky-mid);
+    border-radius: 16px;
+    padding: 1.75rem;
+    height: 100%;
+    transition: all 0.3s;
+}
+.testimonial-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px rgba(14,165,233,0.1);
+}
+.stars { color: #f59e0b; font-size: 0.85rem; margin-bottom: 0.85rem; }
+.testimonial-text {
+    font-size: 0.92rem;
+    color: var(--text-dark);
+    line-height: 1.7;
+    margin-bottom: 1.25rem;
+    font-style: italic;
+}
+.testimonial-avatar {
+    width: 42px; height: 42px;
+    border-radius: 50%;
+    background: var(--sky);
+    display: flex; align-items: center; justify-content: center;
+    color: #fff;
+    font-weight: 700;
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+.testimonial-name { font-weight: 700; font-size: 0.88rem; color: var(--sky-deeper); }
+.testimonial-role { font-size: 0.78rem; color: var(--text-muted); }
+
+/* ═══════════════════════════════════════════
+   STATS BANNER
+═══════════════════════════════════════════ */
+.stats-banner {
+    background: linear-gradient(135deg, var(--sky-deeper) 0%, var(--sky-dark) 100%);
+    padding: 4rem 0;
+}
+.stat-box { text-align: center; }
+.stat-box .big-num {
+    font-size: 3rem;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1;
+}
+.stat-box .big-lbl {
+    color: var(--sky-mid);
+    font-size: 0.88rem;
+    margin-top: 0.4rem;
+    font-weight: 500;
+}
+
+/* ═══════════════════════════════════════════
+   PRICING
+═══════════════════════════════════════════ */
+.pricing-card {
+    background: #fff;
+    border: 2px solid var(--sky-mid);
+    border-radius: 20px;
+    padding: 2.25rem;
+    text-align: center;
+    transition: all 0.3s;
+    height: 100%;
+}
+.pricing-card.featured {
+    border-color: var(--sky);
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    transform: scale(1.04);
+}
+.pricing-card:hover {
+    box-shadow: 0 20px 50px rgba(14,165,233,0.15);
+    transform: translateY(-4px);
+}
+.pricing-card.featured:hover { transform: scale(1.04) translateY(-4px); }
+.price-badge {
+    display: inline-block;
+    background: var(--sky);
+    color: #fff;
+    border-radius: 50px;
+    padding: 0.2rem 0.85rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+.plan-name {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--sky-deeper);
+    margin-bottom: 0.5rem;
+}
+.plan-price {
+    font-size: 2.8rem;
+    font-weight: 800;
+    color: var(--sky-deeper);
+    line-height: 1;
+}
+.plan-price span { font-size: 1rem; font-weight: 500; color: var(--text-muted); }
+.plan-features {
+    list-style: none;
+    padding: 0;
+    margin: 1.5rem 0;
+    text-align: left;
+}
+.plan-features li {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.88rem;
+    color: var(--text-dark);
+    margin-bottom: 0.6rem;
+}
+.plan-features li i { color: var(--sky); font-size: 1rem; }
+
+/* ═══════════════════════════════════════════
+   CTA SECTION
+═══════════════════════════════════════════ */
+.cta-section {
+    background: linear-gradient(135deg, #0c4a6e 0%, #0ea5e9 100%);
+    padding: 5rem 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+.cta-section::before {
+    content: '';
+    position: absolute;
+    width: 500px; height: 500px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.05);
+    top: -250px; left: -100px;
+}
+.cta-section::after {
+    content: '';
+    position: absolute;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.05);
+    bottom: -150px; right: -50px;
+}
+.cta-section h2 {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 1rem;
+}
+.cta-section p { color: rgba(255,255,255,0.8); font-size: 1.05rem; margin-bottom: 2rem; }
+.btn-cta-white {
+    background: #fff;
+    color: var(--sky-dark);
+    border-radius: 12px;
+    padding: 0.85rem 2rem;
+    font-weight: 700;
+    font-size: 1rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.25s;
+}
+.btn-cta-white:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+    color: var(--sky-dark);
+}
+
+/* ═══════════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════════ */
+.footer {
+    background: var(--sky-deeper);
+    color: rgba(255,255,255,0.75);
+    padding: 4rem 0 2rem;
+}
+.footer-brand {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin-bottom: 0.85rem;
+}
+.footer-brand .brand-icon {
+    width: 32px; height: 32px;
+    background: var(--sky);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff;
+    font-size: 1rem;
+}
+.footer p { font-size: 0.88rem; line-height: 1.7; }
+.footer-title {
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.88rem;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+.footer-links { list-style: none; padding: 0; }
+.footer-links li { margin-bottom: 0.5rem; }
+.footer-links a {
+    color: rgba(255,255,255,0.65);
+    text-decoration: none;
+    font-size: 0.88rem;
+    transition: color 0.2s;
+}
+.footer-links a:hover { color: var(--sky-mid); }
+.footer-bottom {
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 1.5rem;
+    margin-top: 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    font-size: 0.82rem;
+}
+.social-links { display: flex; gap: 0.65rem; }
+.social-link {
+    width: 34px; height: 34px;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.1);
+    display: flex; align-items: center; justify-content: center;
+    color: rgba(255,255,255,0.75);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+}
+.social-link:hover {
+    background: var(--sky);
+    color: #fff;
+}
+
+/* ═══════════════════════════════════════════
+   ANIMATIONS
+═══════════════════════════════════════════ */
+@keyframes fadeSlideDown {
+    from { opacity:0; transform: translateY(-20px); }
+    to   { opacity:1; transform: translateY(0); }
+}
+@keyframes fadeSlideLeft {
+    from { opacity:0; transform: translateX(30px); }
+    to   { opacity:1; transform: translateX(0); }
+}
+.fade-in {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.6s ease;
+}
+.fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════ */
+@media (max-width: 768px) {
+    .step-connector { display: none; }
+    .hero { padding-top: 100px; }
+    .hero-visual { margin-top: 3rem; }
+    .float-card { display: none; }
+    .pricing-card.featured { transform: scale(1); }
+}
+
+/* ── Slider Animation ── */
+.slide {
+    animation: slideIn 0.5s ease;
+}
+@keyframes slideIn {
+    from { opacity: 0; transform: scale(1.03); }
+    to   { opacity: 1; transform: scale(1); }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════
+     NAVBAR
+═══════════════════════════════════════════ -->
+<nav class="navbar" id="mainNav">
+    <div class="container d-flex align-items-center justify-content-between">
+
+        <!-- Brand -->
+        <a href="/" class="navbar-brand">
+            <div class="brand-icon"><i class="bi bi-capsule-pill"></i></div>
+            PharmaCare
+        </a>
+
+        <!-- Links (desktop) -->
+        <div class="d-none d-lg-flex align-items-center gap-1">
+            <a href="#features" class="nav-link-custom">Features</a>
+            <a href="#how-it-works" class="nav-link-custom">How It Works</a>
+            <a href="#testimonials" class="nav-link-custom">Reviews</a>
+            <a href="#pricing" class="nav-link-custom">Pricing</a>
+            <a href="#contact" class="nav-link-custom">Contact</a>
+        </div>
+
+        <!-- Right Actions -->
+        <div class="d-flex align-items-center gap-2">
+            <a href="{% url 'login' %}" class="btn-login">
+                <i class="bi bi-box-arrow-in-right"></i>
+                Login
+            </a>
+            <!-- Mobile toggle -->
+            <button class="btn d-lg-none border-0 p-1" id="mobileToggle"
+                    style="color:var(--sky-deeper);">
+                <i class="bi bi-list fs-4"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu"
+         style="display:none; background:#fff; border-top:1px solid var(--sky-mid);
+                padding:1rem 1.5rem;">
+        <a href="#features" class="d-block py-2 nav-link-custom">Features</a>
+        <a href="#how-it-works" class="d-block py-2 nav-link-custom">How It Works</a>
+        <a href="#testimonials" class="d-block py-2 nav-link-custom">Reviews</a>
+        <a href="#pricing" class="d-block py-2 nav-link-custom">Pricing</a>
+        <a href="#contact" class="d-block py-2 nav-link-custom">Contact</a>
+    </div>
+</nav>
+
+
+<!-- ═══════════════════════════════════════════
+     HERO
+═══════════════════════════════════════════ -->
+<section class="hero" id="home">
+    <div class="container">
+        <div class="row align-items-center g-5">
+
+            <!-- Left: Text -->
+            <div class="col-lg-6">
+                <div class="hero-badge">
+                    <span class="dot"></span>
+                    Trusted by 500+ Pharmacies Across Nepal
+                </div>
+                <h1>
+                    Modern Pharmacy<br>
+                    <span class="highlight">Management</span><br>
+                    Made Simple
+                </h1>
+                <p class="hero-desc">
+                    PharmaCare streamlines your entire pharmacy operations —
+                    from medicine inventory and billing to eSewa payments and
+                    real-time sales reports. Built for pharmacists, by pharmacists.
+                </p>
+                <div class="hero-actions">
+                    <a href="{% url 'dashboard' %}" class="btn-primary-sky">
+                        <i class="bi bi-rocket-takeoff"></i>
+                        Get Started Free
+                    </a>
+                    <a href="#how-it-works" class="btn-outline-sky">
+                        <i class="bi bi-play-circle"></i>
+                        See How It Works
+                    </a>
+                </div>
+                <div class="hero-stats">
+                    <div class="hero-stat">
+                        <div class="num">500+</div>
+                        <div class="lbl">Pharmacies</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="num">50K+</div>
+                        <div class="lbl">Bills Created</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="num">99.9%</div>
+                        <div class="lbl">Uptime</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Image Slider -->
+            <div class="col-lg-6">
+                <div class="hero-visual">
+
+                    <!-- Floating card top-left -->
+                    <div class="float-card card-1">
+                        <div class="float-icon" style="background:#dcfce7;">
+                            <i class="bi bi-graph-up-arrow" style="color:#16a34a;"></i>
+                        </div>
+                        <div>
+                            <div style="font-size:0.72rem; color:var(--text-muted);">Today's Revenue</div>
+                            <div style="color:var(--sky-deeper);">Rs. 24,580</div>
+                        </div>
+                    </div>
+
+                    <!-- Slider -->
+                    <div class="hero-slider" id="heroSlider">
+                        <div class="slide active" style="background: linear-gradient(135deg, #0c4a6e 0%, #0ea5e9 100%); display:flex; align-items:center; justify-content:center;">
+                            <div class="text-center text-white p-4">
+                                <i class="bi bi-capsule-pill" style="font-size:5rem; opacity:0.8;"></i>
+                                <h4 class="mt-3 fw-bold">Medicine Inventory</h4>
+                                <p class="opacity-75">Track stock, expiry & reorder alerts in real time</p>
+                            </div>
+                            <div class="slide-overlay"></div>
+                        </div>
+                        <div class="slide" style="background: linear-gradient(135deg, #064e3b 0%, #059669 100%); display:none; align-items:center; justify-content:center;">
+                            <div class="text-center text-white p-4">
+                                <i class="bi bi-receipt-cutoff" style="font-size:5rem; opacity:0.8;"></i>
+                                <h4 class="mt-3 fw-bold">Smart Billing</h4>
+                                <p class="opacity-75">Create bills with multiple medicines in seconds</p>
+                            </div>
+                            <div class="slide-overlay"></div>
+                        </div>
+                        <div class="slide" style="background: linear-gradient(135deg, #1e1b4b 0%, #6366f1 100%); display:none; align-items:center; justify-content:center;">
+                            <div class="text-center text-white p-4">
+                                <i class="bi bi-credit-card" style="font-size:5rem; opacity:0.8;"></i>
+                                <h4 class="mt-3 fw-bold">eSewa Payments</h4>
+                                <p class="opacity-75">Accept digital payments securely via eSewa</p>
+                            </div>
+                            <div class="slide-overlay"></div>
+                        </div>
+                        <div class="slide" style="background: linear-gradient(135deg, #7c2d12 0%, #ea580c 100%); display:none; align-items:center; justify-content:center;">
+                            <div class="text-center text-white p-4">
+                                <i class="bi bi-bar-chart-line" style="font-size:5rem; opacity:0.8;"></i>
+                                <h4 class="mt-3 fw-bold">Sales Reports</h4>
+                                <p class="opacity-75">Daily, weekly & monthly revenue analytics</p>
+                            </div>
+                            <div class="slide-overlay"></div>
+                        </div>
+                    </div>
+
+                    <!-- Dots -->
+                    <div class="slider-dots">
+                        <button class="slider-dot active" onclick="goToSlide(0)"></button>
+                        <button class="slider-dot" onclick="goToSlide(1)"></button>
+                        <button class="slider-dot" onclick="goToSlide(2)"></button>
+                        <button class="slider-dot" onclick="goToSlide(3)"></button>
+                    </div>
+
+                    <!-- Floating card bottom-right -->
+                    <div class="float-card card-2">
+                        <div class="float-icon" style="background:#fef9c3;">
+                            <i class="bi bi-exclamation-triangle" style="color:#ca8a04;"></i>
+                        </div>
+                        <div>
+                            <div style="font-size:0.72rem; color:var(--text-muted);">Low Stock Alert</div>
+                            <div style="color:var(--sky-deeper);">3 medicines need reorder</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     TRUST BAR
+═══════════════════════════════════════════ -->
+<div class="trust-bar">
+    <div class="trust-bar-track">
+        {% for item in trust_items %}<div class="trust-item"><i class="bi bi-check-circle-fill"></i>{{ item }}</div>{% endfor %}
+        {% for item in trust_items %}<div class="trust-item"><i class="bi bi-check-circle-fill"></i>{{ item }}</div>{% endfor %}
+    </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════
+     FEATURES
+═══════════════════════════════════════════ -->
+<section class="section" id="features">
+    <div class="container">
+        <div class="text-center mb-5 fade-in">
+            <div class="section-tag"><i class="bi bi-stars"></i> Features</div>
+            <h2 class="section-title">Everything your pharmacy needs</h2>
+            <p class="section-sub mx-auto">
+                From inventory to billing to reports — PharmaCare covers every
+                aspect of pharmacy management in one clean dashboard.
+            </p>
+        </div>
+        <div class="row g-4">
+            {% for feature in features %}
+            <div class="col-md-6 col-lg-4 fade-in">
+                <div class="feature-card">
+                    <div class="feature-icon" style="background:{{ feature.bg }};">
+                        <i class="bi bi-{{ feature.icon }}" style="color:{{ feature.color }};"></i>
+                    </div>
+                    <h5>{{ feature.title }}</h5>
+                    <p>{{ feature.desc }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     HOW IT WORKS
+═══════════════════════════════════════════ -->
+<section class="section section-bg" id="how-it-works">
+    <div class="container">
+        <div class="text-center mb-5 fade-in">
+            <div class="section-tag"><i class="bi bi-map"></i> Process</div>
+            <h2 class="section-title">Four simple steps to get started</h2>
+            <p class="section-sub mx-auto">
+                Set up your pharmacy in minutes. No technical skills required.
+            </p>
+        </div>
+        <div class="row g-4 justify-content-center">
+            {% for step in steps %}
+            <div class="col-sm-6 col-lg-3 fade-in">
+                <div class="step-card">
+                    {% if not forloop.last %}<div class="step-connector"></div>{% endif %}
+                    <div class="step-number">{{ forloop.counter }}</div>
+                    <div class="mb-3">
+                        <div style="width:56px; height:56px; border-radius:14px;
+                                    background:var(--sky-light);
+                                    display:flex; align-items:center; justify-content:center;
+                                    margin:0 auto 1rem; font-size:1.5rem;">
+                            <i class="bi bi-{{ step.icon }}" style="color:var(--sky);"></i>
+                        </div>
+                    </div>
+                    <h5>{{ step.title }}</h5>
+                    <p>{{ step.desc }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     STATS BANNER
+═══════════════════════════════════════════ -->
+<div class="stats-banner">
+    <div class="container">
+        <div class="row g-4 text-center">
+            {% for stat in stats %}
+            <div class="col-6 col-md-3 fade-in">
+                <div class="stat-box">
+                    <div class="big-num">{{ stat.num }}</div>
+                    <div class="big-lbl">{{ stat.label }}</div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════
+     TESTIMONIALS
+═══════════════════════════════════════════ -->
+<section class="section" id="testimonials">
+    <div class="container">
+        <div class="text-center mb-5 fade-in">
+            <div class="section-tag"><i class="bi bi-chat-quote"></i> Reviews</div>
+            <h2 class="section-title">Loved by pharmacists everywhere</h2>
+        </div>
+        <div class="row g-4">
+            {% for t in testimonials %}
+            <div class="col-md-6 col-lg-4 fade-in">
+                <div class="testimonial-card">
+                    <div class="stars">
+                        ★★★★★
+                    </div>
+                    <p class="testimonial-text">"{{ t.text }}"</p>
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="testimonial-avatar">{{ t.initial }}</div>
+                        <div>
+                            <div class="testimonial-name">{{ t.name }}</div>
+                            <div class="testimonial-role">{{ t.role }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     PRICING
+═══════════════════════════════════════════ -->
+<section class="section section-bg" id="pricing">
+    <div class="container">
+        <div class="text-center mb-5 fade-in">
+            <div class="section-tag"><i class="bi bi-tag"></i> Pricing</div>
+            <h2 class="section-title">Simple, transparent pricing</h2>
+            <p class="section-sub mx-auto">No hidden charges. Cancel anytime.</p>
+        </div>
+        <div class="row g-4 align-items-center justify-content-center">
+            {% for plan in pricing %}
+            <div class="col-md-6 col-lg-4 fade-in">
+                <div class="pricing-card {% if plan.featured %}featured{% endif %}">
+                    {% if plan.featured %}
+                    <div class="price-badge">Most Popular</div>
+                    {% endif %}
+                    <div class="plan-name">{{ plan.name }}</div>
+                    <div class="plan-price">
+                        Rs. {{ plan.price }}<span>/mo</span>
+                    </div>
+                    <p style="font-size:0.82rem; color:var(--text-muted); margin-top:0.5rem;">
+                        {{ plan.desc }}
+                    </p>
+                    <ul class="plan-features">
+                        {% for f in plan.features %}
+                        <li><i class="bi bi-check-circle-fill"></i>{{ f }}</li>
+                        {% endfor %}
+                    </ul>
+                    <a href="{% url 'dashboard' %}"
+                       class="{% if plan.featured %}btn-primary-sky{% else %}btn-outline-sky{% endif %} w-100 justify-content-center">
+                        {{ plan.cta }}
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     CTA
+═══════════════════════════════════════════ -->
+<section class="cta-section" id="contact">
+    <div class="container" style="position:relative; z-index:1;">
+        <div class="fade-in">
+            <h2>Ready to modernize your pharmacy?</h2>
+            <p>Join 500+ pharmacies already using PharmaCare.</p>
+            <div class="d-flex gap-3 justify-content-center flex-wrap">
+                <a href="{% url 'dashboard' %}" class="btn-cta-white">
+                    <i class="bi bi-rocket-takeoff"></i>
+                    Start for Free
+                </a>
+                <a href="mailto:support@pharmacare.com.np"
+                   class="btn-outline-sky"
+                   style="color:#fff; border-color:rgba(255,255,255,0.4);">
+                    <i class="bi bi-envelope"></i>
+                    Contact Us
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     FOOTER
+═══════════════════════════════════════════ -->
+<footer class="footer">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-4">
+                <div class="footer-brand">
+                    <div class="brand-icon"><i class="bi bi-capsule-pill"></i></div>
+                    PharmaCare
+                </div>
+                <p>Modern Pharmacy Management System built for Nepal's healthcare professionals. Streamline operations, reduce errors, grow revenue.</p>
+                <div class="social-links mt-3">
+                    <a href="#" class="social-link"><i class="bi bi-facebook"></i></a>
+                    <a href="#" class="social-link"><i class="bi bi-twitter-x"></i></a>
+                    <a href="#" class="social-link"><i class="bi bi-instagram"></i></a>
+                    <a href="#" class="social-link"><i class="bi bi-linkedin"></i></a>
+                </div>
+            </div>
+            <div class="col-sm-4 col-lg-2 offset-lg-1">
+                <div class="footer-title">Product</div>
+                <ul class="footer-links">
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#pricing">Pricing</a></li>
+                    <li><a href="#how-it-works">How It Works</a></li>
+                    <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+                </ul>
+            </div>
+            <div class="col-sm-4 col-lg-2">
+                <div class="footer-title">System</div>
+                <ul class="footer-links">
+                    <li><a href="{% url 'medicine_list' %}">Medicines</a></li>
+                    <li><a href="{% url 'create_bill' %}">Billing</a></li>
+                    <li><a href="{% url 'reports' %}">Reports</a></li>
+                    <li><a href="{% url 'cart' %}">Cart</a></li>
+                </ul>
+            </div>
+            <div class="col-sm-4 col-lg-3">
+                <div class="footer-title">Contact</div>
+                <ul class="footer-links">
+                    <li><i class="bi bi-geo-alt me-2" style="color:var(--sky-mid);"></i>Kathmandu, Nepal</li>
+                    <li><i class="bi bi-envelope me-2" style="color:var(--sky-mid);"></i>support@pharmacare.com.np</li>
+                    <li><i class="bi bi-telephone me-2" style="color:var(--sky-mid);"></i>+977 01-XXXXXXX</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>© 2024 PharmaCare. All rights reserved.</span>
+            <span>Made with <i class="bi bi-heart-fill text-danger"></i> for Nepal's pharmacists</span>
+        </div>
+    </div>
+</footer>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+/* ── Navbar scroll effect ── */
+window.addEventListener('scroll', () => {
+    document.getElementById('mainNav').classList.toggle('scrolled', window.scrollY > 30);
+});
+
+/* ── Mobile menu toggle ── */
+document.getElementById('mobileToggle').addEventListener('click', () => {
+    const m = document.getElementById('mobileMenu');
+    m.style.display = m.style.display === 'none' ? 'block' : 'none';
+});
+
+/* ── Hero image slider ── */
+let currentSlide = 0;
+const slides = document.querySelectorAll('.hero-slider .slide');
+const dots   = document.querySelectorAll('.slider-dot');
+
+function goToSlide(n) {
+    slides[currentSlide].style.display = 'none';
+    dots[currentSlide].classList.remove('active');
+    currentSlide = n;
+    slides[currentSlide].style.display = 'flex';
+    dots[currentSlide].classList.add('active');
+}
+
+/* Auto-advance every 3 seconds */
+setInterval(() => {
+    goToSlide((currentSlide + 1) % slides.length);
+}, 3000);
+
+/* ── Scroll fade-in animation ── */
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+        if (e.isIntersecting) {
+            e.target.classList.add('visible');
+            observer.unobserve(e.target);
+        }
+    });
+}, { threshold: 0.12 });
+
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+/* ── Smooth scroll for anchor links ── */
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+        e.preventDefault();
+        const target = document.querySelector(a.getAttribute('href'));
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        document.getElementById('mobileMenu').style.display = 'none';
+    });
+});
+
+/* ── Counter animation ── */
+function animateCounter(el, target) {
+    let count = 0;
+    const step = target / 60;
+    const timer = setInterval(() => {
+        count += step;
+        if (count >= target) { el.textContent = el.dataset.target; clearInterval(timer); }
+        else el.textContent = Math.floor(count) + (el.dataset.suffix || '');
+    }, 16);
+}
+</script>
+</body>
+</html>

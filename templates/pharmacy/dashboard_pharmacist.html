@@ -1,0 +1,127 @@
+{% extends 'pharmacy/base.html' %}
+{% block title %}Dashboard — PharmaCare{% endblock %}
+{% block page_title %}<i class="bi bi-speedometer2 me-2"></i>Pharmacist Dashboard{% endblock %}
+
+{% block content %}
+
+<!-- ── Stat Cards ── -->
+<div class="row g-3 mb-4">
+    <div class="col-sm-6">
+        <div class="stat-card">
+            <div class="stat-icon" style="background:#e0f2fe;">
+                <i class="bi bi-receipt" style="color:#0ea5e9;"></i>
+            </div>
+            <div>
+                <div class="stat-label">Today's Bills</div>
+                <div class="stat-value">{{ todays_bill_count }}</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="stat-card">
+            <div class="stat-icon" style="background:#e0f2fe;">
+                <i class="bi bi-capsule" style="color:#0ea5e9;"></i>
+            </div>
+            <div>
+                <div class="stat-label">Available Medicines</div>
+                <div class="stat-value">{{ total_medicines }}</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ── Low stock warning ── -->
+{% if low_stock_count > 0 %}
+<div class="alert alert-warning d-flex align-items-center gap-2 mb-4">
+    <i class="bi bi-exclamation-triangle-fill fs-5"></i>
+    <strong>{{ low_stock_count }} medicine(s) are running low on stock.</strong>
+    <a href="{% url 'medicine_list' %}" class="btn btn-sm btn-warning ms-auto">View</a>
+</div>
+{% endif %}
+
+<!-- ── Quick Action Cards ── -->
+<div class="row g-3 mb-4">
+    <div class="col-md-6">
+        <div class="card text-center p-4 h-100">
+            <i class="bi bi-receipt-cutoff mb-3"
+               style="font-size:3rem; color:#0ea5e9;"></i>
+            <h5 class="fw-bold" style="color:#0c4a6e;">Create New Bill</h5>
+            <p class="text-muted small">Start a new billing session for a customer</p>
+            <a href="{% url 'create_bill' %}"
+               class="btn mt-auto text-white"
+               style="background:#0ea5e9;">
+                <i class="bi bi-receipt me-1"></i> Start Billing
+            </a>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card text-center p-4 h-100">
+            <i class="bi bi-capsule-pill mb-3"
+               style="font-size:3rem; color:#0284c7;"></i>
+            <h5 class="fw-bold" style="color:#0c4a6e;">View Medicines</h5>
+            <p class="text-muted small">Browse the full medicine inventory</p>
+            <a href="{% url 'medicine_list' %}"
+               class="btn mt-auto"
+               style="background:#e0f2fe; color:#0284c7;">
+                <i class="bi bi-list me-1"></i> View Medicines
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- ── Recent Bills ── -->
+<div class="card">
+    <div class="card-header d-flex align-items-center justify-content-between"
+         style="background:#0ea5e9; color:#fff;">
+        <span><i class="bi bi-clock-history me-2"></i>Recent Bills</span>
+        <a href="{% url 'bill_list' %}" class="btn btn-sm btn-light">View All</a>
+    </div>
+    <div class="card-body p-0">
+        {% if recent_bills %}
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th>Bill #</th>
+                        <th>Customer</th>
+                        <th>Amount</th>
+                        <th>Time</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for bill in recent_bills %}
+                    <tr>
+                        <td>
+                            <span class="badge"
+                                  style="background:#e0f2fe; color:#0284c7;">
+                                {{ bill.bill_number }}
+                            </span>
+                        </td>
+                        <td>{{ bill.customer_name }}</td>
+                        <td class="fw-semibold text-success">Rs. {{ bill.total_amount }}</td>
+                        <td class="text-muted small">
+                            {{ bill.created_at|date:"d M, H:i" }}
+                        </td>
+                        <td>
+                            <a href="{% url 'bill_invoice' bill.pk %}"
+                               class="btn btn-sm"
+                               style="background:#e0f2fe; color:#0284c7;">
+                                <i class="bi bi-eye"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="text-center py-4 text-muted small">
+            <i class="bi bi-inbox d-block fs-3 mb-1"></i>No bills yet today.
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}
+

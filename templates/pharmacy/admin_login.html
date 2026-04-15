@@ -1,0 +1,74 @@
+{% extends 'pharmacy/base.html' %}
+{% block title %}Admin Login — PharmaCare{% endblock %}
+
+{% block auth_content %}
+<div style="min-height:100vh; background:linear-gradient(135deg,#0c4a6e 0%,#075985 100%);
+            display:flex; align-items:center; justify-content:center; padding:1rem;">
+
+    <div style="width:100%; max-width:420px;">
+
+        <!-- Logo -->
+        <div class="text-center mb-3">
+            <i class="bi bi-shield-lock" style="font-size:3rem; color:#fff;"></i>
+            <h3 class="text-white fw-bold mt-1 mb-0">Admin Portal</h3>
+            <small class="text-white-50">PharmaCare Management System</small>
+        </div>
+
+        <!-- Card -->
+        <div class="card border-0 shadow">
+            <div class="card-header text-white text-center py-3 border-0"
+                 style="background:#0c4a6e; border-radius:12px 12px 0 0 !important;">
+                <i class="bi bi-person-badge me-2"></i>Admin Sign In
+            </div>
+            <div class="card-body p-4">
+
+                {% if messages %}
+                    {% for message in messages %}
+                    <div class="alert alert-danger py-2 small">
+                        <i class="bi bi-exclamation-circle me-1"></i>{{ message }}
+                    </div>
+                    {% endfor %}
+                {% endif %}
+
+                <form method="POST" action="{% url 'admin_login' %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label">Admin Username</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white">
+                                <i class="bi bi-person-badge" style="color:#0c4a6e;"></i>
+                            </span>
+                            <input type="text" name="username" class="form-control"
+                                   placeholder="Enter admin username" required autofocus>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label">Password</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white">
+                                <i class="bi bi-lock" style="color:#0c4a6e;"></i>
+                            </span>
+                            <input type="password" name="password" class="form-control"
+                                   placeholder="Enter password" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn w-100 py-2 fw-semibold text-white"
+                            style="background:#0c4a6e; border:none;">
+                        <i class="bi bi-shield-check me-2"></i>Login as Admin
+                    </button>
+                </form>
+
+                <div class="text-center mt-3">
+                    <a href="{% url 'pharmacist_login' %}" class="text-muted small me-3">
+                        Pharmacist Login
+                    </a>
+                    <a href="{% url 'login' %}" class="text-muted small">
+                        General Login
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

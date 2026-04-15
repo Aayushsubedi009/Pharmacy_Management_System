@@ -1,0 +1,56 @@
+{% extends 'pharmacy/base.html' %}
+{% block title %}Payment Successful — PharmaCare{% endblock %}
+{% block page_title %}<i class="bi bi-check-circle me-2"></i>Payment Successful{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+<div class="col-lg-6">
+    <div class="card text-center p-5">
+        <i class="bi bi-check-circle-fill mb-3"
+           style="font-size:4rem; color:#3bb54a;"></i>
+        <h4 class="fw-bold mb-2" style="color:#0c4a6e;">
+            Payment Successful!
+        </h4>
+        <p class="text-muted mb-1">
+            Your eSewa payment was completed successfully.
+        </p>
+
+        <!-- Payment Details -->
+        <div class="p-3 rounded mt-3 mb-4 text-start"
+             style="background:#f0fdf4; border:1px solid #bbf7d0;">
+            <div class="d-flex justify-content-between small mb-2">
+                <span class="text-muted">Medicine</span>
+                <span class="fw-semibold">{{ order.medicine.name }}</span>
+            </div>
+            <div class="d-flex justify-content-between small mb-2">
+                <span class="text-muted">Quantity</span>
+                <span>{{ order.quantity }}</span>
+            </div>
+            <div class="d-flex justify-content-between small mb-2">
+                <span class="text-muted">Transaction ID</span>
+                <span class="text-muted" style="font-size:0.75rem;">
+                    {{ order.transaction_uuid }}
+                </span>
+            </div>
+            <hr style="border-color:#bbf7d0;" class="my-2">
+            <div class="d-flex justify-content-between fw-bold">
+                <span>Amount Paid</span>
+                <span class="text-success">Rs. {{ order.total_price }}</span>
+            </div>
+        </div>
+
+        <div class="d-flex gap-2 justify-content-center">
+            <a href="{% url 'my_orders' %}"
+               class="btn text-white px-4"
+               style="background:#0ea5e9;">
+                <i class="bi bi-bag me-2"></i>My Orders
+            </a>
+            <a href="{% url 'medicine_list' %}"
+               class="btn btn-outline-secondary px-4">
+                Continue Shopping
+            </a>
+        </div>
+    </div>
+</div>
+</div>
+{% endblock %}
